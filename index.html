@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Calc & Bill Suite</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/calculator.css">
+    <link rel="stylesheet" href="css/billing.css">
+    <link rel="stylesheet" href="css/terminal.css">
+    <link rel="stylesheet" href="css/invoice.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <div id="portal-screen" class="portal-screen page-active">
+        <div class="portal-container">
+            <header class="portal-header">
+                <h1>What would you like to use today?</h1>
+                <p>Select an environment to begin your workspace operations.</p>
+            </header>
+            <div class="portal-cards">
+                <button class="portal-card" id="btn-select-calc" aria-label="Open Student Calculator">
+                    <div class="card-glow"></div>
+                    <div class="card-icon-wrapper calc-icon">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <h2>Student Calculator</h2>
+                    <p>Perfect for daily calculations, percentages, and advanced scientific operations.</p>
+                    <span class="card-action-text">Launch Workspace <i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+                <button class="portal-card" id="btn-select-billing" aria-label="Open Shopkeeper Billing System">
+                    <div class="card-glow"></div>
+                    <div class="card-icon-wrapper bill-icon">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
+                    <h2>Shopkeeper Billing System</h2>
+                    <p>Manage modular items, calculate live bills, configure custom GST slabs, and generate invoices.</p>
+                    <span class="card-action-text">Launch Workspace <i class="fa-solid fa-arrow-right"></i></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="dashboard-layout" class="dashboard-layout hidden">
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-logo"><i class="fa-solid fa-layer-group"></i></div>
+                <span class="brand-title">OmniSuite</span>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" id="nav-dash" aria-label="Dashboard Menu">
+                    <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+                </button>
+                <button class="nav-item" id="nav-calc" aria-label="Calculator Mode">
+                    <i class="fa-solid fa-calculator"></i> <span>Calculator</span>
+                </button>
+                <button class="nav-item" id="nav-billing" aria-label="Billing System Mode">
+                    <i class="fa-solid fa-receipt"></i> <span>Billing Engine</span>
+                </button>
+                <button class="nav-item" id="nav-terminal" aria-label="CLI Terminal Mode">
+                    <i class="fa-solid fa-terminal"></i> <span>Warp Terminal</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn-settings-toggle" id="btn-open-settings" aria-label="Open Workspace Settings">
+                    <i class="fa-solid fa-gear"></i> <span>Settings</span>
+                </button>
+                <button class="btn-switch-workspace" id="btn-exit-workspace" aria-label="Exit Workspace Mode">
+                    <i class="fa-solid fa-right-from-bracket"></i> <span>Exit Workspace</span>
+                </button>
+            </div>
+        </aside>
+
+        <div class="main-content">
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <h2 id="top-bar-title">Workspace Overview</h2>
+                </div>
+                <div class="top-bar-right">
+                    <button id="theme-toggle-btn" class="icon-action-btn" aria-label="Toggle Theme Mode">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <div class="live-clock" id="live-clock">00:00:00 PM</div>
+                </div>
+            </header>
+
+            <main class="workspace-viewport">
+                <section id="view-dashboard" class="workspace-view view-active">
+                    <div class="dashboard-home-grid">
+                        <div class="welcome-card-premium">
+                            <div class="welcome-text">
+                                <h1>Welcome back to your environment</h1>
+                                <p>All dynamic analytics, background terminal variables, and computing parameters are active and synchronized with LocalStorage persistence data state models.</p>
+                            </div>
+                            <div class="welcome-graphic">
+                                <i class="fa-solid fa-circle-nodes"></i>
+                            </div>
+                        </div>
+
+                        <div class="quick-status-row">
+                            <div class="quick-stat-box">
+                                <div class="stat-icon-container bg-p"><i class="fa-solid fa-calculator"></i></div>
+                                <div class="stat-meta">
+                                    <span class="stat-label">Last Calc Entry</span>
+                                    <span class="stat-value" id="dash-stat-calc">0</span>
+                                </div>
+                            </div>
+                            <div class="quick-stat-box">
+                                <div class="stat-icon-container bg-s"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+                                <div class="stat-meta">
+                                    <span class="stat-label">Active Total Invoice</span>
+                                    <span class="stat-value" id="dash-stat-bill">₹0.00</span>
+                                </div>
+                            </div>
+                            <div class="quick-stat-box">
+                                <div class="stat-icon-container bg-a"><i class="fa-solid fa-terminal"></i></div>
+                                <div class="stat-meta">
+                                    <span class="stat-label">Terminal Stack</span>
+                                    <span class="stat-value" id="dash-stat-cli">0 Cmds</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="interactive-launcher-grid">
+                            <div class="launcher-card" id="launch-card-calc">
+                                <h3>Launch Calculator Panel</h3>
+                                <p>Access engineering layout math modules, square roots, memory operations, and local evaluation history registers seamlessly.</p>
+                                <span class="launch-link">Navigate View <i class="fa-solid fa-chevron-right"></i></span>
+                            </div>
+                            <div class="launcher-card" id="launch-card-bill">
+                                <h3>Launch Billing Workspace</h3>
+                                <p>Manage modular items counters, track sales totals, manipulate items arrays, run profit calculators, and export digital invoices.</p>
+                                <span class="launch-link">Navigate View <i class="fa-solid fa-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="view-calculator" class="workspace-view">
+                    <div class="calculator-workspace-layout">
+                        <div class="calculator-card-frame">
+                            <div class="calculator-display-area">
+                                <div class="calc-expression" id="calc-expression" aria-live="polite"></div>
+                                <div class="calc-main-row">
+                                    <span class="calc-operator-indicator" id="calc-op-indicator"></span>
+                                    <input type="text" class="calc-screen-input" id="calc-screen" value="0" readonly aria-label="Calculator Output Field">
+                                </div>
+                            </div>
+                            <div class="calculator-keypad">
+                                <button class="btn-calc memory-btn" data-calc="MC">MC</button>
+                                <button class="btn-calc memory-btn" data-calc="MR">MR</button>
+                                <button class="btn-calc memory-btn" data-calc="M+">M+</button>
+                                <button class="btn-calc memory-btn" data-calc="M-">M-</button>
+
+                                <button class="btn-calc system-btn" data-calc="C">C</button>
+                                <button class="btn-calc system-btn" data-calc="DEL"><i class="fa-solid fa-backspace"></i></button>
+                                <button class="btn-calc science-btn" data-calc="mod">mod</button>
+                                <button class="btn-calc op-btn" data-calc="/">÷</button>
+
+                                <button class="btn-calc science-btn" data-calc="pow">x<sup>y</sup></button>
+                                <button class="btn-calc science-btn" data-calc="sqr">x²</button>
+                                <button class="btn-calc science-btn" data-calc="cube">x³</button>
+                                <button class="btn-calc op-btn" data-calc="*">×</button>
+
+                                <button class="btn-calc num-btn" data-calc="7">7</button>
+                                <button class="btn-calc num-btn" data-calc="8">8</button>
+                                <button class="btn-calc num-btn" data-calc="9">9</button>
+                                <button class="btn-calc op-btn" data-calc="-">-</button>
+
+                                <button class="btn-calc num-btn" data-calc="4">4</button>
+                                <button class="btn-calc num-btn" data-calc="5">5</button>
+                                <button class="btn-calc num-btn" data-calc="6">6</button>
+                                <button class="btn-calc op-btn" data-calc="+">+</button>
+
+                                <button class="btn-calc num-btn" data-calc="1">1</button>
+                                <button class="btn-calc num-btn" data-calc="2">2</button>
+                                <button class="btn-calc num-btn" data-calc="3">3</button>
+                                <button class="btn-calc science-btn" data-calc="sqrt">√</button>
+
+                                <button class="btn-calc num-btn" data-calc="0">0</button>
+                                <button class="btn-calc num-btn" data-calc=".">.</button>
+                                <button class="btn-calc science-btn" data-calc="pct">%</button>
+                                <button class="btn-calc action-btn-equal" data-calc="=">=</button>
+                            </div>
+                        </div>
+
+                        <div class="calculator-history-sidebar">
+                            <div class="sidebar-header-row">
+                                <h3>History Ledger</h3>
+                                <button class="btn-text-action" id="btn-clear-calc-history"><i class="fa-solid fa-trash-can"></i> Clear</button>
+                            </div>
+                            <div class="history-list-container" id="calc-history-list">
+                                <div class="empty-state-text">No previous calculations recorded in current sequence.</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="view-billing" class="workspace-view">
+                    <div class="billing-workspace-grid">
+                        <div class="billing-stats-strip">
+                            <div class="billing-stat-card card-primary">
+                                <span class="b-stat-title">Running Gross Total</span>
+                                <span class="b-stat-val" id="stat-gross-total">₹0.00</span>
+                            </div>
+                            <div class="billing-stat-card card-success">
+                                <span class="b-stat-title">Applied Dynamic Tax (GST)</span>
+                                <span class="b-stat-val" id="stat-tax-total">₹0.00</span>
+                            </div>
+                            <div class="billing-stat-card card-accent">
+                                <span class="b-stat-title">Aggregated Discount Reduction</span>
+                                <span class="b-stat-val" id="stat-discount-total">₹0.00</span>
+                            </div>
+                            <div class="billing-stat-card card-dark">
+                                <span class="b-stat-title">Net Payable Receivable</span>
+                                <span class="b-stat-val" id="stat-payable-total">₹0.00</span>
+                            </div>
+                        </div>
+
+                        <div class="billing-operations-core">
+                            <div class="billing-left-panel">
+                                <div class="panel-card-container">
+                                    <div class="card-header-actions">
+                                        <h3>Item Parameters Input Interface</h3>
+                                    </div>
+                                    <form id="billing-item-form" class="item-entry-form-grid" novalidate>
+                                        <input type="hidden" id="edit-item-id" value="">
+                                        <div class="input-field-group grid-span-4">
+                                            <label for="bill-item-name">Inventory Item Designation</label>
+                                            <input type="text" id="bill-item-name" placeholder="e.g. Enterprise Server Arrays" required autocomplete="off">
+                                        </div>
+                                        <div class="input-field-group grid-span-2">
+                                            <label for="bill-item-qty">Quantity Matrix Counter</label>
+                                            <input type="number" id="bill-item-qty" min="1" value="1" required>
+                                        </div>
+                                        <div class="input-field-group grid-span-2">
+                                            <label for="bill-item-price">Unit Base Selling Price (₹)</label>
+                                            <input type="number" id="bill-item-price" min="0" step="0.01" placeholder="0.00" required>
+                                        </div>
+                                        <div class="input-field-group grid-span-2">
+                                            <label for="bill-item-discount">Item Level Discount (%)</label>
+                                            <input type="number" id="bill-item-discount" min="0" max="100" value="0">
+                                        </div>
+                                        <div class="input-field-group grid-span-2">
+                                            <label for="bill-item-gst-slab">Tax Matrix Slab Assignment</label>
+                                            <select id="bill-item-gst-slab">
+                                                <option value="0">Exempt (0%)</option>
+                                                <option value="5">Slab Base (5%)</option>
+                                                <option value="12">Standard Tier (12%)</option>
+                                                <option value="18" selected>Standard Enterprise Tier (18%)</option>
+                                                <option value="28">Luxury Asset Tier (28%)</option>
+                                                <option value="custom">Custom Variable Slab</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field-group grid-span-4 hidden" id="custom-gst-wrapper">
+                                            <label for="bill-item-custom-gst">Custom Specific GST Rate (%)</label>
+                                            <input type="number" id="bill-item-custom-gst" min="0" max="100" value="0">
+                                        </div>
+                                        <div class="form-action-row grid-span-4">
+                                            <button type="button" id="btn-clear-item-form" class="btn-secondary-action">Reset Inputs</button>
+                                            <button type="submit" id="btn-submit-item-form" class="btn-primary-action">Commit Entry Array</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="panel-card-container data-table-wrapper">
+                                    <div class="table-controls-row">
+                                        <div class="search-input-frame">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                            <input type="text" id="table-search-input" placeholder="Query registered records stack...">
+                                        </div>
+                                        <div class="filter-actions-cluster">
+                                            <select id="table-sort-trigger" aria-label="Sort configuration matrix">
+                                                <option value="index-asc">Sequence: Chronological</option>
+                                                <option value="name-asc">Alphabetical: A-Z</option>
+                                                <option value="name-desc">Alphabetical: Z-A</option>
+                                                <option value="total-desc">Valuation: High to Low</option>
+                                                <option value="total-asc">Valuation: Low to High</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="responsive-table-scroller">
+                                        <table class="premium-data-table" id="billing-items-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Item Designation</th>
+                                                    <th class="text-center">Qty Metric</th>
+                                                    <th class="text-right">Unit Rate</th>
+                                                    <th class="text-right">Discount</th>
+                                                    <th class="text-right">Applied GST</th>
+                                                    <th class="text-right">Cumulative Net</th>
+                                                    <th class="text-center">Operations Stack</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="billing-table-body">
+                                                </tbody>
+                                        </table>
+                                        <div class="empty-table-placeholder" id="billing-table-empty">
+                                            <i class="fa-solid fa-box-open"></i>
+                                            <p>No item entities committed to running invoice layout registers.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="billing-right-panel">
+                                <div class="panel-card-container">
+                                    <h3>Global Adjustments Layout Ledger</h3>
+                                    <div class="global-adjustments-form">
+                                        <div class="input-field-group">
+                                            <label for="global-discount-type">Global Discount Paradigm</label>
+                                            <select id="global-discount-type">
+                                                <option value="flat">Flat Capital Amount Reducer (₹)</option>
+                                                <option value="percent">Percentage Factor reduction (%)</option>
+                                                <option value="coupon">Structured Operational Promo Coupon</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field-group" id="global-discount-value-wrapper">
+                                            <label for="global-discount-value" id="global-discount-label">Discount Magnitude Value</label>
+                                            <input type="number" id="global-discount-value" min="0" value="0">
+                                        </div>
+                                        <div class="input-field-group hidden" id="global-coupon-wrapper">
+                                            <label for="global-coupon-code">Enterprise Promo Voucher Voucher String</label>
+                                            <input type="text" id="global-coupon-code" placeholder="ENTERPRISE20, MAXSAVINGS">
+                                        </div>
+                                        <div class="input-field-grid-2-col">
+                                            <div class="input-field-group">
+                                                <label for="global-shipping">Logistics/Shipping Costs (₹)</label>
+                                                <input type="number" id="global-shipping" min="0" value="0">
+                                            </div>
+                                            <div class="input-field-group">
+                                                <label for="global-service">Operational Service Fees (₹)</label>
+                                                <input type="number" id="global-service" min="0" value="0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel-card-container margin-calculator-card">
+                                    <h3>Operational Margin Analysis Matrix</h3>
+                                    <div class="margin-calc-grid">
+                                        <div class="input-field-group">
+                                            <label for="margin-cost-price">Aggregated Cost Incurred (₹)</label>
+                                            <input type="number" id="margin-cost-price" min="0" value="0" placeholder="0.00">
+                                        </div>
+                                        <div class="input-field-group">
+                                            <label for="margin-selling-price">Projected Revenue Matrix (₹)</label>
+                                            <input type="number" id="margin-selling-price" min="0" value="0" readonly placeholder="0.00">
+                                        </div>
+                                        <div class="margin-results-strip grid-span-2" id="margin-results-output">
+                                            <div class="margin-metric-sub-box">
+                                                <span class="m-label">Net Profit/Loss Yield</span>
+                                                <span class="m-val" id="margin-yield-value">₹0.00</span>
+                                            </div>
+                                            <div class="margin-metric-sub-box">
+                                                <span class="m-label">Margin Percentage Ratio</span>
+                                                <span class="m-val" id="margin-ratio-value">0.00%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="panel-card-container invoice-meta-card">
+                                    <h3>Client Information System Mapping</h3>
+                                    <div class="meta-input-stack">
+                                        <div class="input-field-group">
+                                            <label for="meta-store-name">Operating Node Enterprise Label</label>
+                                            <input type="text" id="meta-store-name" value="Apex Global Trading Corp">
+                                        </div>
+                                        <div class="input-field-group">
+                                            <label for="meta-customer-name">Client Entity Legal Identity</label>
+                                            <input type="text" id="meta-customer-name" placeholder="Anonymous Entity Client Platform">
+                                        </div>
+                                    </div>
+                                    <div class="invoice-actions-block">
+                                        <button type="button" id="btn-reset-entire-bill" class="btn-danger-action"><i class="fa-solid fa-rotate-left"></i> Flush Active State</button>
+                                        <button type="button" id="btn-trigger-invoice-preview" class="btn-accent-action"><i class="fa-solid fa-file-invoice"></i> Compile Bill Invoice</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="view-terminal" class="workspace-view">
+                    <div class="terminal-workspace-container">
+                        <div class="terminal-window-chrome">
+                            <div class="chrome-header-left">
+                                <span class="chrome-dot dot-close"></span>
+                                <span class="chrome-dot dot-minimize"></span>
+                                <span class="chrome-dot dot-expand"></span>
+                                <span class="chrome-title-text"><i class="fa-solid fa-terminal"></i> core-shell-v2.8.4.exe</span>
+                            </div>
+                            <div class="chrome-header-right">
+                                <span class="chrome-env-badge">Active Sandbox Node</span>
+                            </div>
+                        </div>
+                        <div class="terminal-body-viewport" id="terminal-scroller-area">
+                            <div class="terminal-motd-block">
+                                <p>OMNISUITE CORE PARALLEL SUBSYSTEM PROTOCOL SHELL ENGINE [Version 2026.7.9]</p>
+                                <p>(c) Enterprise Core Execution Frameworks. Absolute systems control interface terminal.</p>
+                                <p>Inject inline commands parameters array models directly to billing records data array pools.</p>
+                                <p>Type <span class="syntax-keyword">help</span> to render structural instructions map arrays.</p>
+                            </div>
+                            <div id="terminal-history-log-output"></div>
+                            <div class="terminal-interactive-line">
+                                <span class="terminal-prompt-decorator">core-node-user@omnisuite:~#</span>
+                                <div class="terminal-input-wrapper">
+                                    <input type="text" id="terminal-command-input" autofocus autocomplete="off" aria-label="Terminal CLI Input Channel">
+                                    <div class="terminal-autosuggest-hint" id="terminal-suggest-hint"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div class="modal-overlay-backdrop hidden" id="invoice-preview-modal-overlay">
+        <div class="modal-window-container custom-invoice-modal-width">
+            <div class="modal-window-header-bar">
+                <h3>Structured Operational Commercial Invoice Invoice Statement</h3>
+                <button class="modal-close-trigger-btn" id="btn-close-invoice-modal" aria-label="Dismiss Modal Frame"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-scrollable-content-viewport">
+                <div class="invoice-printable-sheet" id="invoice-capture-print-target">
+                    </div>
+            </div>
+            <div class="modal-window-footer-actions">
+                <button type="button" class="btn-secondary-action" id="btn-dismiss-invoice-modal-footer">Dismiss Form</button>
+                <button type="button" class="btn-accent-action" id="btn-trigger-native-print"><i class="fa-solid fa-print"></i> Native Operating System Spool Print</button>
+                <button type="button" class="btn-primary-action" id="btn-trigger-html-download"><i class="fa-solid fa-download"></i> Save Independent HTML Payload</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay-backdrop hidden" id="settings-modal-overlay">
+        <div class="modal-window-container structural-settings-modal-width">
+            <div class="modal-window-header-bar">
+                <h3>Global Environment Parameters Panel</h3>
+                <button class="modal-close-trigger-btn" id="btn-close-settings-modal" aria-label="Dismiss Settings Panel"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-scrollable-content-viewport body-padding-normal">
+                <div class="settings-sections-vertical-stack">
+                    <div class="settings-control-block-unit">
+                        <h4>Interface Color Palette Mode Theme Matrix</h4>
+                        <p>Configure structural root visual stylesheets across active workspace viewports.</p>
+                        <div class="theme-selection-segmented-control">
+                            <button type="button" class="segment-btn pattern-theme-selector" data-theme-target="light">
+                                <i class="fa-solid fa-sun"></i> High Contrast Light Theme
+                            </button>
+                            <button type="button" class="segment-btn pattern-theme-selector" data-theme-target="dark">
+                                <i class="fa-solid fa-moon"></i> Enterprise Obsidian Dark Theme
+                            </button>
+                        </div>
+                    </div>
+                    <div class="settings-control-block-unit">
+                        <h4>Active Component Accent Highlight Tones</h4>
+                        <p>Alter UI theme interaction state borders visual coloring profile elements.</p>
+                        <div class="accent-swatches-row">
+                            <button type="button" class="accent-swatch-btn active" data-accent-color="#4F46E5" style="background-color: #4F46E5;" title="Indigo Core"></button>
+                            <button type="button" class="accent-swatch-btn" data-accent-color="#7C3AED" style="background-color: #7C3AED;" title="Royal Purple"></button>
+                            <button type="button" class="accent-swatch-btn" data-accent-color="#10B981" style="background-color: #10B981;" title="Emerald Mint"></button>
+                            <button type="button" class="accent-swatch-btn" data-accent-color="#EF4444" style="background-color: #EF4444;" title="Crimson Red"></button>
+                            <button type="button" class="accent-swatch-btn" data-accent-color="#F59E0B" style="background-color: #F59E0B;" title="Amber Flare"></button>
+                            <button type="button" class="accent-swatch-btn" data-accent-color="#2563EB" style="background-color: #2563EB;" title="Vercel Azure"></button>
+                        </div>
+                    </div>
+                    <div class="settings-control-block-unit">
+                        <h4>Scale System Base Fonts Configuration</h4>
+                        <p>Optimize element microcopy proportions rendering states parameters metrics hierarchy.</p>
+                        <select id="setting-system-font-size-scale" class="form-select-native-ui-element">
+                            <option value="14px">Compact Dense Grid (14px)</option>
+                            <option value="16px" selected>Standard Engineering Baseline (16px)</option>
+                            <option value="18px">Accessible Scaled High Contrast (18px)</option>
+                        </select>
+                    </div>
+                    <div class="settings-control-block-unit explicit-destruction-warning-zone">
+                        <h4>Destructive System Memory Storage Purge Registers</h4>
+                        <p>Flushes all tracking arrays, running application configuration options caches, calculation history strings, and items indices structural models completely from LocalStorage allocation layers.</p>
+                        <button type="button" class="btn-danger-action" id="btn-purge-localstorage-cache"><i class="fa-solid fa-dumpster-fire"></i> Purge Entire Application Persistent Memory Stack</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-window-footer-actions">
+                <button type="button" class="btn-primary-action" id="btn-save-close-settings-modal">Commit Settings Configurations</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/calculator.js"></script>
+    <script src="js/billing.js"></script>
+    <script src="js/terminal.js"></script>
+    <script src="js/invoice.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

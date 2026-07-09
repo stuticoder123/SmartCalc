@@ -1,0 +1,31 @@
+[data-theme="dark"] {
+    --bg-main: #0B0F19;
+    --card-bg: #111827;
+    --text-main: #F9FAFB;
+    --text-muted: #9CA3AF;
+    --border-color: #1F2937;
+    --sidebar-bg: #111827;
+    --topbar-bg: rgba(17, 24, 39, 0.8);
+    --scrollbar-track: #111827;
+    --scrollbar-thumb: #374151;
+}
+
+[data-theme="dark"] .portal-screen {
+    background: radial-gradient(circle at 50% 50%, #111827 0%, #0B0F19 100%);
+}
+
+[data-theme="dark"] .op-btn { background: #1E1B4B; color: #C084FC; }
+[data-theme="dark"] .op-btn:hover { background: #312E81; }
+[data-theme="dark"] .science-btn { background: #064E3B; color: #34D399; }
+[data-theme="dark"] .science-btn:hover { background: #065F46; }
+[data-theme="dark"] .memory-btn { background: #1F2937; color: #9CA3AF; }
+[data-theme="dark"] .memory-btn:hover { background: #374151; }
+[data-theme="dark"] .system-btn { background: #7F1D1D; color: #FCA5A5; }
+[data-theme="dark"] .system-btn:hover { background: #991B1B; }
+
+[data-theme="dark"] .card-primary, 
+[data-theme="dark"] .card-success, 
+[data-theme="dark"] .card-accent, 
+[data-theme="dark"] .card-dark {
+    background: #111827;
+}

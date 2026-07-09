@@ -1,0 +1,41 @@
+@media (max-width: 1024px) {
+    .portal-container { max-width: 768px; gap: 2rem; }
+    .portal-header h1 { font-size: 2.25rem; }
+    .portal-cards { gap: 1.5rem; }
+    .portal-card { padding: 2rem 1.75rem; }
+
+    .calculator-workspace-layout { grid-template-columns: 1fr; }
+    .calculator-history-sidebar { height: 320px; }
+
+    .billing-operations-core { grid-template-columns: 1fr; }
+    .billing-stats-strip { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .portal-cards { grid-template-columns: 1fr; }
+    .dashboard-layout { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border-color); }
+    .sidebar-brand { padding: 1rem; }
+    .sidebar-nav { flex-direction: row; padding: 0.5rem; overflow-x: auto; }
+    .nav-item { width: auto; white-space: nowrap; padding: 0.5rem 0.75rem; }
+    .sidebar-footer { flex-direction: row; padding: 0.5rem; }
+    .btn-settings-toggle, .btn-switch-workspace { width: auto; padding: 0.5rem 0.75rem; }
+    
+    .top-bar { padding: 0 1rem; }
+    .workspace-viewport { padding: 1rem; }
+    
+    .quick-status-row { grid-template-columns: 1fr; gap: 1rem; }
+    .interactive-launcher-grid { grid-template-columns: 1fr; }
+    
+    .item-entry-form-grid { grid-template-columns: 1fr; }
+    .grid-span-4, .grid-span-2 { grid-column: span 1; }
+    .form-action-row { width: 100%; justify-content: space-between; }
+    
+    .billing-stats-strip { grid-template-columns: 1fr; }
+    .table-controls-row { flex-direction: column; align-items: flex-start; }
+    .search-input-frame { max-width: 100%; }
+    
+    .modal-overlay-backdrop { padding: 0.5rem; }
+    .invoice-printable-sheet { padding: 1.5rem; gap: 1.5rem; }
+    .invoice-parameters-segment { grid-template-columns: 1fr; gap: 1rem; }
+}
